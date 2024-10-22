@@ -1,0 +1,14 @@
+/Users/gunnarebeling/workspace/csharp/ExtraVert/bin/Debug/net8.0/ExtraVert
+/Users/gunnarebeling/workspace/csharp/ExtraVert/bin/Debug/net8.0/ExtraVert.deps.json
+/Users/gunnarebeling/workspace/csharp/ExtraVert/bin/Debug/net8.0/ExtraVert.runtimeconfig.json
+/Users/gunnarebeling/workspace/csharp/ExtraVert/bin/Debug/net8.0/ExtraVert.dll
+/Users/gunnarebeling/workspace/csharp/ExtraVert/bin/Debug/net8.0/ExtraVert.pdb
+/Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ExtraVert.GeneratedMSBuildEditorConfig.editorconfig
+/Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ExtraVert.AssemblyInfoInputs.cache
+/Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ExtraVert.AssemblyInfo.cs
+/Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ExtraVert.csproj.CoreCompileInputs.cache
+/Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ExtraVert.dll
+/Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/refint/ExtraVert.dll
+/Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ExtraVert.pdb
+/Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ExtraVert.genruntimeconfig.cache
+/Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ref/ExtraVert.dll
