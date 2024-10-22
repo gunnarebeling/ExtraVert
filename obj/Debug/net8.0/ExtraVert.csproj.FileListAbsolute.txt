@@ -12,3 +12,4 @@
 /Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ExtraVert.pdb
 /Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ExtraVert.genruntimeconfig.cache
 /Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ref/ExtraVert.dll
+/Users/gunnarebeling/workspace/csharp/ExtraVert/obj/Debug/net8.0/ExtraVert.sourcelink.json

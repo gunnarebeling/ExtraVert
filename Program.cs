@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Channels;
 using System.Xml;
 
+Random random = new Random();
+
 List<Plant> plants = new List<Plant>()
 {
     new Plant
@@ -45,13 +47,14 @@ List<Plant> plants = new List<Plant>()
     new Plant
     {
         Species = "Peace Lily",
-        LightNeeds = 1,
+        LightNeeds = 4,
         AskingPrice = 20.00m,
         City = "Chicago",
         ZIP = "60601",
         Sold = false
     }
 };
+
 void PlantList()
 {
     for (int i = 0; i < plants.Count; i++)
@@ -129,6 +132,24 @@ void postPlant()
             Console.WriteLine("please enter valid ZIP");
         };
 
+    }
+
+    Console.WriteLine("when is the plant available till?");
+    bool correctDate = false;
+    while (!correctDate)
+    {
+       try
+       {
+            Console.WriteLine("enter year");
+            int year = int.Parse(Console.ReadLine().Trim());
+            int mont
+            
+       }
+       catch (Exception)
+       {
+        
+        
+       } 
     }
 
     Plant newPlant = 
@@ -218,17 +239,59 @@ void delistPlant()
         }
     }
 }
+void randomPlant()
+{
+    int plantOfTheDay = 0;
+    bool PlantSold = true;
+    while (PlantSold)
+    {
+        plantOfTheDay = random.Next(1, plants.Count);
+        PlantSold = !plants[plantOfTheDay].Sold ? false : PlantSold;
+        
+    }
+    Console.WriteLine($"{plants[plantOfTheDay].Species} in {plants[plantOfTheDay].City} {(plants[plantOfTheDay].Sold? "was sold" : "is avaiable")} for {plants[plantOfTheDay].AskingPrice} dollars");
+}
+void searchByLight()
+{
+    int choice = 0;
+    while (choice < 1 || choice > 5)
+    {
+        try
+        {
+            Console.WriteLine("choose 1-5 based on level of light the plant needs");
+            choice = int.Parse(Console.ReadLine().Trim());
+            
+        }
+        catch (Exception ex)
+        {
+            
+            Console.WriteLine("selecton needs to be a int from 1-5");
+        }
+        
+    }
+
+    var lightSelections = plants.Where(p => p.LightNeeds <= choice).ToList();
+    Console.Clear();
+    for (int i = 0; i < lightSelections.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}. {lightSelections[i].Species}");
+    }
+    Console.ReadKey();
+}
 string greeting = "Hello welcome to ExtraVert select one";
 Console.WriteLine(greeting);
 string response = null;                                        
-while (response != "e")
+while (response != "g")
 {
+    Console.Clear();
     Console.WriteLine(@"choose an option:
                         a. Displat all plants
                         b. Post a plant to be adopted
                         c. Adopt a plant
                         d. Delist a plant
-                        e. Exit");
+                        e. Plant of the day
+                        f. Search for Plants by Light Needs
+                        g. Exit");
   try
     {
         response = Console.ReadLine();
@@ -255,7 +318,17 @@ while (response != "e")
                 Console.Clear();
                 delistPlant();
                 break;
-            case "e": 
+            case "e":
+                Console.Clear();
+                randomPlant();
+                Console.ReadKey();
+                break;
+            case "f":
+                Console.Clear();
+                searchByLight();
+                break;
+
+            case "g": 
                 Console.WriteLine("BYE!!");
                 break;
             default:
