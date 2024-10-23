@@ -3,8 +3,10 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Threading.Channels;
 using System.Xml;
+using Microsoft.VisualBasic;
 
 Random random = new Random();
+DateTime now = DateTime.Now;
 
 List<Plant> plants = new List<Plant>()
 {
@@ -15,7 +17,8 @@ List<Plant> plants = new List<Plant>()
         AskingPrice = 25.50m,
         City = "Los Angeles",
         ZIP = "90001",
-        Sold = false
+        Sold = false,
+        AvailableUntil = new DateTime(2024, 09, 10)  
     },
     new Plant
     {
@@ -24,7 +27,8 @@ List<Plant> plants = new List<Plant>()
         AskingPrice = 15.00m,
         City = "New York",
         ZIP = "10001",
-        Sold = true
+        Sold = true,
+        AvailableUntil = new DateTime(2024, 11, 15)  
     },
     new Plant
     {
@@ -33,7 +37,8 @@ List<Plant> plants = new List<Plant>()
         AskingPrice = 18.75m,
         City = "Austin",
         ZIP = "73301",
-        Sold = false
+        Sold = false,
+        AvailableUntil = new DateTime(2025, 1, 5)  
     },
     new Plant
     {
@@ -42,7 +47,8 @@ List<Plant> plants = new List<Plant>()
         AskingPrice = 12.30m,
         City = "Phoenix",
         ZIP = "85001",
-        Sold = true
+        Sold = true,
+        AvailableUntil = new DateTime(2024, 10, 31)  
     },
     new Plant
     {
@@ -51,15 +57,24 @@ List<Plant> plants = new List<Plant>()
         AskingPrice = 20.00m,
         City = "Chicago",
         ZIP = "60601",
-        Sold = false
+        Sold = false,
+        AvailableUntil = new DateTime(2025, 3, 1) 
     }
 };
+
+var nonSoldPlants = plants.Where(plant =>
+{
+    bool isAvailable = !plant.Sold;
+    TimeSpan expTimeSpan = plant.AvailableUntil - now;
+    bool notExp = expTimeSpan > TimeSpan.Zero;
+    return isAvailable && notExp;
+} ).ToList();
 
 void PlantList()
 {
     for (int i = 0; i < plants.Count; i++)
     {
-        Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} {(plants[i].Sold? "was sold" : "is avaiable")} for {plants[i].AskingPrice} dollars");
+        Console.WriteLine($"{i + 1}. {PlantDetails(plants[i])} in {plants[i].City} {(plants[i].Sold? "was sold" : "is avaiable")} for {plants[i].AskingPrice} dollars");
     };
 };
 void postPlant()
@@ -135,21 +150,44 @@ void postPlant()
     }
 
     Console.WriteLine("when is the plant available till?");
+    DateTime experationDate = new DateTime();
     bool correctDate = false;
     while (!correctDate)
     {
+        int year;
+        int months;
+        int day;
        try
        {
             Console.WriteLine("enter year");
-            int year = int.Parse(Console.ReadLine().Trim());
-            int mont
+             year = int.Parse(Console.ReadLine().Trim());
+             Console.WriteLine("enter month (1-12)");
+             months = int.Parse(Console.ReadLine().Trim());
+             Console.WriteLine("enter day:");
+             day = int.Parse(Console.ReadLine().Trim());
             
+            experationDate =  new DateTime(year, months, day);
+            TimeSpan experationLength = experationDate - now;
+            if (experationLength < TimeSpan.Zero)
+            {
+                Console.WriteLine("The expiration date is in the past.");
+            }
+            else
+            {
+                correctDate = true;
+            }
        }
-       catch (Exception)
+       catch (ArgumentOutOfRangeException)
        {
+            Console.WriteLine("the date is out of range!");
+            
         
-        
+       }
+       catch(FormatException)
+       {
+            Console.WriteLine("the date needs to be in number format only!");
        } 
+
     }
 
     Plant newPlant = 
@@ -160,18 +198,18 @@ void postPlant()
         AskingPrice = newAskingPrice,
         City = newCity,
         ZIP = newZip,
-        Sold = false
+        Sold = false,
+        AvailableUntil = experationDate
 
 
     };
 
     plants.Add(newPlant);
-    Console.WriteLine($"{newPlant.Species} has been successfully added");
+    Console.WriteLine($"{PlantDetails(newPlant)} has been successfully added");
 
 }
 void AdoptPlant()
 {
-    var nonSoldPlants = plants.Where(plant => !plant.Sold).ToList();
     int Choice = 0;
     while (Choice > nonSoldPlants.Count || Choice < 1)
     {
@@ -180,7 +218,7 @@ void AdoptPlant()
             Console.WriteLine(@"Adopt one of these Plants");
             for (int i = 0; i < nonSoldPlants.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {nonSoldPlants[i].Species}");
+                Console.WriteLine($"{i + 1}. {PlantDetails(nonSoldPlants[i])}");
             }
 
             Console.WriteLine("select plant:");
@@ -213,7 +251,7 @@ void delistPlant()
             Console.WriteLine(@"Adopt one of these Plants");
             for (int i = 0; i < plants.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {plants[i].Species}");
+                Console.WriteLine($"{i + 1}. {PlantDetails(plants[i])}");
             }
 
             Console.WriteLine("select plant:");
@@ -249,7 +287,7 @@ void randomPlant()
         PlantSold = !plants[plantOfTheDay].Sold ? false : PlantSold;
         
     }
-    Console.WriteLine($"{plants[plantOfTheDay].Species} in {plants[plantOfTheDay].City} {(plants[plantOfTheDay].Sold? "was sold" : "is avaiable")} for {plants[plantOfTheDay].AskingPrice} dollars");
+    Console.WriteLine($"{PlantDetails(plants[plantOfTheDay])} in {plants[plantOfTheDay].City} {(plants[plantOfTheDay].Sold? "was sold" : "is avaiable")} for {plants[plantOfTheDay].AskingPrice} dollars");
 }
 void searchByLight()
 {
@@ -274,14 +312,54 @@ void searchByLight()
     Console.Clear();
     for (int i = 0; i < lightSelections.Count; i++)
     {
-        Console.WriteLine($"{i + 1}. {lightSelections[i].Species}");
+        Console.WriteLine($"{i + 1}. {PlantDetails(lightSelections[i])}");
     }
     Console.ReadKey();
 }
+
+void stats()
+{
+    Plant lowestCostPlant= plants[0];
+    foreach (Plant plant in plants)
+    {
+        if (plant.AskingPrice < lowestCostPlant.AskingPrice)
+        {
+            lowestCostPlant = plant;
+        }
+    }
+    Plant highestLightPlant = plants.Aggregate(plants[0],(highestPlant, plant) => 
+    {
+        if (plant.LightNeeds > highestPlant.LightNeeds)
+        {
+            highestPlant = plant;
+        }
+        return highestPlant;
+    });
+    
+    double aveLightNeeds = plants.Aggregate(0.0, (total, plant) => 
+    {
+        total += plant.LightNeeds;
+        return total;
+    }) / plants.Count;
+
+    var adoptedPlants = plants.Where( plant => plant.Sold).ToList();
+    double adoptionAve = (double)adoptedPlants.Count / plants.Count * 100;
+
+
+    Console.WriteLine($"the cheapest plant is {PlantDetails(lowestCostPlant)}");
+    Console.WriteLine($"there are {nonSoldPlants.Count} plants available");
+    Console.WriteLine($"the plant with the highest light needs is {highestLightPlant.Species}");
+    Console.WriteLine($"the average light needs is {aveLightNeeds}");
+    Console.WriteLine($"{adoptionAve}% of plants have been adopted");
+
+    Console.ReadKey();
+    
+}
+
 string greeting = "Hello welcome to ExtraVert select one";
 Console.WriteLine(greeting);
 string response = null;                                        
-while (response != "g")
+while (response != "h")
 {
     Console.Clear();
     Console.WriteLine(@"choose an option:
@@ -291,7 +369,8 @@ while (response != "g")
                         d. Delist a plant
                         e. Plant of the day
                         f. Search for Plants by Light Needs
-                        g. Exit");
+                        g. ExtraVert Stats
+                        h. Exit");
   try
     {
         response = Console.ReadLine();
@@ -327,8 +406,13 @@ while (response != "g")
                 Console.Clear();
                 searchByLight();
                 break;
+            case "g":
+                Console.Clear();
+                stats();
+                break;
 
-            case "g": 
+
+            case "h": 
                 Console.WriteLine("BYE!!");
                 break;
             default:
@@ -346,4 +430,10 @@ while (response != "g")
     }
     
     
-}                   
+}     
+
+string PlantDetails(Plant plant)
+{
+    string plantString = plant.Species;
+    return plantString;
+}
